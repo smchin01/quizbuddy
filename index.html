@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AWS SAA-C03 Quiz</title>
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 
@@ -99,6 +99,22 @@
     </div>
   </div>
 
-  <script src="app.js?v=3"></script>
+  <!-- ── Mastered List Screen ──────────────────────────────────────────── -->
+  <div id="screen-list" class="screen">
+    <div class="quiz-header">
+      <div class="list-header-row">
+        <button class="btn btn-ghost" onclick="renderHome()">← Back</button>
+        <div class="list-header-info">
+          <span id="list-title" style="font-weight:700"></span>
+          <span id="list-count" class="list-count"></span>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div id="list-items" class="list-items"></div>
+    </div>
+  </div>
+
+  <script src="app.js?v=4"></script>
 </body>
 </html>

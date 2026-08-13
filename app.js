@@ -76,7 +76,71 @@ function renderHome() {
     : `${available} question${available === 1 ? '' : 's'} available  ·  ${reviewQs.length} review  +  ${untouchedQs.length} new`;
 
   document.getElementById('start-btn').disabled = available === 0;
+
+  // Wire stat card click handlers
+  const masteredCard  = document.getElementById('stat-mastered').closest('.stat-card');
+  const reviewCard    = document.getElementById('stat-review').closest('.stat-card');
+  const remainingCard = document.getElementById('stat-remaining').closest('.stat-card');
+
+  setCardHandler(masteredCard,  state.mastered.size > 0  ? showMasteredList              : null, '📋 View list');
+  setCardHandler(reviewCard,    reviewQs.length > 0      ? () => startFilteredQuiz('review')    : null, '▶ Quiz these');
+  setCardHandler(remainingCard, untouchedQs.length > 0   ? () => startFilteredQuiz('untouched') : null, '▶ Quiz these');
+
   show('screen-home');
+}
+
+function setCardHandler(card, handler, tipText) {
+  card.onclick = handler || null;
+  card.classList.toggle('clickable', !!handler);
+  let tip = card.querySelector('.card-tip');
+  if (handler) {
+    if (!tip) { tip = document.createElement('div'); tip.className = 'card-tip'; card.appendChild(tip); }
+    tip.textContent = tipText;
+  } else if (tip) {
+    tip.remove();
+  }
+}
+
+// ── Mastered list ──────────────────────────────────────────────────────────────
+
+function showMasteredList() {
+  const mastered = allQuestions.filter(q => state.mastered.has(q.id));
+  document.getElementById('list-title').textContent = 'Mastered Questions';
+  document.getElementById('list-count').textContent = `${mastered.length} question${mastered.length !== 1 ? 's' : ''}`;
+
+  const container = document.getElementById('list-items');
+  container.innerHTML = '';
+  mastered.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'list-item';
+    const answerOptions = q.answers.map(letter =>
+      `<div class="list-answer-option"><span class="option-letter correct">${letter}</span><span class="option-text">${q.options[letter] || ''}</span></div>`
+    ).join('');
+    div.innerHTML = `
+      <div class="list-item-meta">Q${i + 1} &nbsp;·&nbsp; Set ${q.set}, #${q.srcQ}</div>
+      <div class="list-item-question">${q.question}</div>
+      <div class="list-answer-block">${answerOptions}</div>`;
+    container.appendChild(div);
+  });
+  show('screen-list');
+}
+
+// ── Filtered quiz (review or untouched only) ───────────────────────────────────
+
+function startFilteredQuiz(type) {
+  const { reviewQs, untouchedQs } = getPool();
+  const pool = type === 'review' ? reviewQs : untouchedQs;
+  if (pool.length === 0) return;
+
+  const questions = shuffle(pool);
+  session = {
+    questions,
+    current:     0,
+    userAnswers: questions.map(() => []),
+    correct:     questions.map(() => null),
+  };
+  renderQuestion();
+  show('screen-quiz');
 }
 
 // ── Quiz screen ────────────────────────────────────────────────────────────────
