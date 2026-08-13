@@ -265,6 +265,20 @@ header h1 {
 .feedback.correct { background: #f0faf4; color: #1a7a40; border: 1px solid #a3e6bc; }
 .feedback.wrong   { background: #fef2f2; color: #c0392b; border: 1px solid #fca5a5; }
 
+/* ── Explanation ─────────────────────────────────────────────────────────────── */
+.explanation {
+  margin-top: 0.85rem;
+  padding: 1rem 1.2rem;
+  border-radius: var(--radius);
+  background: #f8f9fc;
+  border: 1px solid var(--border);
+  border-left: 4px solid #7c8cf8;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--text);
+  white-space: pre-wrap;
+}
+
 /* ── Results ─────────────────────────────────────────────────────────────── */
 .results-header { text-align: center; padding: 1.5rem 0 2rem; }
 .results-header h2 { font-size: 1.6rem; margin-bottom: 1rem; }

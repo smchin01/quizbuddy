@@ -149,16 +149,26 @@ function renderQuestion() {
     optionsEl.appendChild(li);
   });
 
-  // Feedback banner
+  // Feedback banner + explanation
   const feedback = document.getElementById('feedback');
+  const explanationEl = document.getElementById('explanation');
   if (submitted) {
     feedback.className = `feedback ${correct[current] ? 'correct' : 'wrong'}`;
     feedback.textContent = correct[current]
       ? `✓ Correct!  Answer: ${q.answers.join(', ')}`
       : `✗ Incorrect.  Correct answer: ${q.answers.join(', ')}`;
     feedback.style.display = 'block';
+    if (q.explanation) {
+      // Strip trailing separator lines left by the parser
+      const cleaned = q.explanation.replace(/\s*[-=_]{3,}\s*$/gm, '').trim();
+      explanationEl.textContent = cleaned;
+      explanationEl.style.display = cleaned ? 'block' : 'none';
+    } else {
+      explanationEl.style.display = 'none';
+    }
   } else {
     feedback.style.display = 'none';
+    explanationEl.style.display = 'none';
   }
 
   // Submit / Next buttons
