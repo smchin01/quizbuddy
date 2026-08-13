@@ -200,6 +200,7 @@ header h1 {
   letter-spacing: 0.04em;
 }
 .review-badge { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
+.source-ref { color: var(--muted); font-size: 0.82rem; opacity: 0.8; }
 
 /* ── Quiz body ───────────────────────────────────────────────────────────── */
 .quiz-body { padding-top: 1.75rem; padding-bottom: 3rem; }

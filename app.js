@@ -177,6 +177,9 @@ function renderQuestion() {
   // Review badge
   document.getElementById('review-badge').style.display = isInReview ? 'inline-block' : 'none';
 
+  // Source reference, so the question can be looked up in the raw exam/solution text files
+  document.getElementById('source-ref').textContent = `Set ${q.set}, #${q.srcQ}`;
+
   // Multi-select hint
   const multiHint = document.getElementById('multi-hint');
   if (q.multiSelect) {
@@ -347,7 +350,9 @@ async function init() {
   try {
     const res = await fetch('data/questions.json');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    allQuestions = await res.json();
+    const data = await res.json();
+    // Skip questions with no recorded answer key
+    allQuestions = data.filter(q => q.answers && q.answers.length > 0);
     state = loadState();
     renderHome();
   } catch (e) {
