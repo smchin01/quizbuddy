@@ -51,16 +51,15 @@ function getPool() {
 }
 
 function buildQuiz(count) {
-  const { reviewQs, untouchedQs } = getPool();
-  // Review questions come first, then fresh ones
-  return [...shuffle(reviewQs), ...shuffle(untouchedQs)].slice(0, count);
+  const { untouchedQs } = getPool();
+  return shuffle(untouchedQs).slice(0, count);
 }
 
 // ── Home screen ────────────────────────────────────────────────────────────────
 
 function renderHome() {
   const { reviewQs, untouchedQs } = getPool();
-  const available = reviewQs.length + untouchedQs.length;
+  const available = untouchedQs.length;
 
   document.getElementById('stat-total').textContent     = allQuestions.length;
   document.getElementById('stat-mastered').textContent  = state.mastered.size;
@@ -72,8 +71,10 @@ function renderHome() {
   countInput.value = Math.min(parseInt(countInput.value, 10) || 20, available || 1);
 
   document.getElementById('available-label').textContent = available === 0
-    ? 'All questions mastered! Reset to practice again.'
-    : `${available} question${available === 1 ? '' : 's'} available  ·  ${reviewQs.length} review  +  ${untouchedQs.length} new`;
+    ? (reviewQs.length > 0
+      ? 'No new questions available. Use In Review to practice flagged questions.'
+      : 'All questions mastered! Reset to practice again.')
+    : `${available} new question${available === 1 ? '' : 's'} available`;
 
   document.getElementById('start-btn').disabled = available === 0;
 
